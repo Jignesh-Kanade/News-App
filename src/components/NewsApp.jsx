@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./NewsApp.css";
 
 const NewsApp = () => {
-  const API_KEY = "191cd51e18d648e388890a4457ab4680";
+  const API_KEY = import.meta.env.VITE_API_KEY.trim()//"191cd51e18d648e388890a4457ab4680"
   const [search, setSearch] = useState("india");
   const [data, setData] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
@@ -12,6 +12,12 @@ const NewsApp = () => {
       `https://newsapi.org/v2/everything?q=${search}&apiKey=${API_KEY}`
     );
     let newsData = await response.json();
+
+    if (!newsData.articles) {
+      console.error("Error fetching news:", newsData);
+      return;
+    }
+
     setData(newsData.articles);
   };
 
